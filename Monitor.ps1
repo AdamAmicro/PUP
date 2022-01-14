@@ -99,8 +99,6 @@ $outputApps = foreach ($app in $apps) {
     $software | Where-Object { $_.DisplayName -match "$app" -and $allowlist -notcontains $_.DisplayName } | Select-Object @{N = "DisplayName"; E = { $_.DisplayName } }, @{N = "UninstallString"; E = { $_.UninstallString } }, @{N = "MatchingApp"; E = { $app } }
 }
 
-$software
-
 if ($outputApps) {
     $report = ($outputApps | Select-Object -Unique) | Format-List | Out-String
     Write-Host -ForegroundColor Yellow "Apps:"
