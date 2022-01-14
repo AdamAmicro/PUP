@@ -44,7 +44,7 @@ function Get-GitHubFiles {
 }
 
 function Save-GitHubFiles {
-    Get-GitHubFiles -Owner AdamNSTA -Repository Syncro -Path "/PUP/JSON/" -DestinationPath "$env:Temp\PUP\"
+    Get-GitHubFiles -Owner AdamAmicro -Repository PUP -Path "/JSON/" -DestinationPath "$env:Temp\PUP\"
     #Get-ChildItem -Path "C:\GitRepos\Syncro\PUP" -Filter "*.json" | Copy-Item -Destination "$env:localAppData\Temp\PUP" -Verbose -Force
 }
 
@@ -76,19 +76,8 @@ $apps = $security + $remoteaccess + $rmm + $crapware + $oem
 # Allowlist array, you must use the full name for the matching to work!
 $allowlist = @"
 [
-    "ScreenConnect Client (0c34888a41840915)\n",
-    "ScreenConnect Client (60cbdd4413783e37)\n",
-    "Splashtop Software Updater\n",
-    "Splashtop for RMM\n",
-    "Splashtop Streamer\n",
-    "Datto Windows Agent\n",
-    "Webroot SecureAnywhere\n",
-    "Microsoft Search in Bing\n",
-    "Dell PointStick Driver\n",
-    "Dell Command | Update\n",
-    "Dell Touchpad\n",
-    "Dell Power Manager Service\n",
-    "Lenovo Vantage Service\n"
+    "teamviewer host",
+    "eWorX Agent"
 ]
 "@ | ConvertFrom-Json
 Write-Host -ForegroundColor Yellow "Allowed Apps:"
@@ -110,6 +99,7 @@ $outputApps = foreach ($app in $apps) {
     $software | Where-Object { $_.DisplayName -match "$app" -and $allowlist -notcontains $_.DisplayName } | Select-Object @{N = "DisplayName"; E = { $_.DisplayName } }, @{N = "UninstallString"; E = { $_.UninstallString } }, @{N = "MatchingApp"; E = { $app } }
 }
 
+$software
 
 if ($outputApps) {
     $report = ($outputApps | Select-Object -Unique) | Format-List | Out-String
