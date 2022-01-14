@@ -1,5 +1,3 @@
-#Import-Module $env:SyncroModule -WarningAction SilentlyContinue
-
 function Get-GitHubFiles {
     Param(
         [string]$Owner,
@@ -10,7 +8,7 @@ function Get-GitHubFiles {
     
     $baseUri = "https://api.github.com/"
     $args = "repos/$Owner/$Repository/contents/$Path"
-    $wr = Invoke-WebRequest -Uri $($baseuri + $args)
+    $wr = Invoke-WebRequest -Uri $($baseuri + $args) -UseBasicParsing
     $objects = $wr.Content | ConvertFrom-Json
     $files = $objects | where-object { $_.type -eq "file" } | Select-object -exp download_url
     $directories = $objects | where-object { $_.type -eq "dir" }
@@ -107,4 +105,5 @@ if ($outputApps) {
 }
 else {
     Write-Host "No Apps Found."
+    exit 0
 }
