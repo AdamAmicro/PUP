@@ -75,6 +75,7 @@ $apps = $security + $remoteaccess + $rmm + $crapware + $oem
 $allowlist = @"
 [
     "teamviewer host",
+    "TeamViewer",
     "eWorX Agent"
 ]
 "@ | ConvertFrom-Json
@@ -98,7 +99,7 @@ $outputApps = foreach ($app in $apps) {
 }
 
 if ($outputApps) {
-    $report = ($outputApps | Select-Object -Unique) | Format-List | Out-String
+    $report = ($outputApps | Format-Table) | Out-String
     Write-Host -ForegroundColor Yellow "Apps:"
     Write-Output "$report"
     exit 1
